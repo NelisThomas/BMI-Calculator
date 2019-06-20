@@ -6,9 +6,15 @@ const Input = ({
     readValue,
     setValue,
 }) => {
+
+
     const handleChange = (e) => {
-        if (e !== '') {
-            setValue(Number(e.target.value));
+        if (!isNaN(Number(e.target.value))) {
+            // if (e.target === document.activeElement) {
+            //     setLocalValue(Number(e.target.value))
+            // } else {
+                setValue(Number(e.target.value))
+            // }
         }
     }
 
@@ -32,7 +38,7 @@ const Input = ({
             <input
                 value={readValue}
                 onChange={handleChange}
-                // onBlur={handleChange}
+                onBlur={handleChange}
             />
             {unit}
             <button onClick={() => handleClick('decrement')}>-</button>

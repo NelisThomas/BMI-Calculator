@@ -1,73 +1,102 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 
 import Input from './Input';
 import BMISlider from './BMISlider';
 
 const BMICalculator = () => {
-    // const [readHeight, setHeight] = useState(0);
-    // const [readWeight, setWeight] = useState(0);
-    // const [readBMI, setBMI] = useState(0);
 
     const [state, setState] = useState({
         height: 0,
         weight: 0,
         bmi: 0,
+        age:0,
+        gender: 'M'
     })
+    const [isChild, setIsChild] = useState(false);
 
-    const calcBMI = (height, weight,whoDis) => {
-        console.log(whoDis);
+    const calcBMI = (height, weight) => {
         const heightInMeters = height / 100;
-        console.log('height:',height);
-        console.log('weight:',weight);
         return (weight / (heightInMeters * heightInMeters));
     }
 
-    const calcWeight = (height, bmi, whoDis) => {
-        console.log(whoDis);
+    const calcWeight = (height, bmi) => {
         const heightInMeters = height / 100;
-        console.log('setting weight:',((heightInMeters * heightInMeters) * bmi));
         return ((heightInMeters * heightInMeters) * bmi)
     }
 
-    // useEffect(() => {
-    //     setBMI(calcBMI(readHeight, readWeight));
-    // }, [readHeight, readWeight]);
-
-    // useEffect(() => {
-    //     setWeight(calcWeight(readHeight, readBMI));
-    // }, [readBMI, readHeight])
-
     const handleHeightChange = (height) => {
-        console.log('handleHeightChange');
         setState({
             ...state,
             height: height,
-            bmi: calcBMI(height, state.weight,'handleHeightChange')
+            bmi: calcBMI(height, state.weight)
         })
     }
 
     const handleWeightChange = (weight) => {
-
-        console.log('handleWeightChange');
         setState({
             ...state,
             weight: weight,
-            bmi: calcBMI(state.height, weight, 'handleWeightChange')
+            bmi: calcBMI(state.height, weight)
         })
     }
 
     const handleBMIChange = (bmi) => {
-        console.log('handleBMIChange');
         setState({
             ...state,
-            weight: calcWeight(state.height, bmi,'handleBMIChange'),
+            weight: calcWeight(state.height, bmi),
             bmi: bmi
+        })
+    }
+
+    const handleAgeChange = (age) => {
+        setState({
+            ...state,
+            age: age
+        })
+    }
+
+    const handleGenderChange = (e) => {
+        setState({
+            ...state,
+            gender: e.target.value
         })
     }
 
     return(
         <div>
             <h3>Calculate your BMI:</h3>
+            <button onClick={() => setIsChild(false)}>Adult</button>
+            <button onClick={() => setIsChild(true)}>Child</button>
+            {isChild && (
+                <form>
+                    <label>
+                        <input
+                            type='radio'
+                            value='male'
+                            checked={state.gender === 'male'}
+                            onChange={handleGenderChange}
+                        />
+                        Male
+                    </label>
+                    <label>
+                        <input
+                            type='radio'
+                            value='female'
+                            checked={state.gender === 'female'}
+                            onChange={handleGenderChange}
+                        />
+                        Female
+                    </label>
+                </form>
+            )}
+            {isChild && (
+                <Input
+                    name="Age"
+                    unit="years"
+                    setValue={handleAgeChange}
+                    readValue={state.age}
+                />
+            )}
             <Input
                 name="Height"
                 unit="cm"
@@ -83,7 +112,7 @@ const BMICalculator = () => {
             <BMISlider
                 setBMI={handleBMIChange}
                 readBMI={state.bmi}
-                active={state.height && state.weight}
+                active={state.height > 0 && state.weight > 0}
             />
         </div>
     )
