@@ -9,7 +9,7 @@ const BMISlider = ({
 }) => {
 
     const maxRange = 75;
-    const minRange = 0;
+    const minRange = 1;
 
     const handleChange = (e) => {
         setBMI(Number(e.target.value))
@@ -31,14 +31,14 @@ const BMISlider = ({
 
     return(
         <div>
-            BMI: {readBMI || 0}
+            BMI: {readBMI}
             <div>
                 <button onClick={() => handleClick('decrement')}>-</button>
                 <input
                     type="range"
                     min={minRange}
                     max={maxRange}
-                    value={readBMI || minRange}
+                    value={readBMI}
                     onChange={handleChange}
                     disabled={!active}
                 />

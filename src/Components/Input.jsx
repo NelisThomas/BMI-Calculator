@@ -38,7 +38,7 @@ const Input = ({
             <input
                 value={readValue}
                 onChange={handleChange}
-                onBlur={handleChange}
+                // onBlur={handleChange}
             />
             {unit}
             <button onClick={() => handleClick('decrement')}>-</button>

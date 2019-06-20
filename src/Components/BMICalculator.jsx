@@ -6,17 +6,21 @@ import BMISlider from './BMISlider';
 const BMICalculator = () => {
 
     const [state, setState] = useState({
-        height: 0,
-        weight: 0,
-        bmi: 0,
-        age:0,
-        gender: 'M'
+        height: '',
+        weight: '',
+        bmi: '',
+        age:'',
+        gender: ''
     })
     const [isChild, setIsChild] = useState(false);
 
     const calcBMI = (height, weight) => {
-        const heightInMeters = height / 100;
-        return (weight / (heightInMeters * heightInMeters));
+        if (height > 0 && weight > 0) {
+            const heightInMeters = height / 100;
+            return (weight / (heightInMeters * heightInMeters));
+        } else {
+            return ''
+        }
     }
 
     const calcWeight = (height, bmi) => {
@@ -28,7 +32,7 @@ const BMICalculator = () => {
         setState({
             ...state,
             height: height,
-            bmi: calcBMI(height, state.weight)
+            bmi: calcBMI(height, state.weight) === 0 ? '' : calcBMI(height, state.weight)
         })
     }
 
@@ -64,6 +68,7 @@ const BMICalculator = () => {
 
     return(
         <div>
+        {console.log(state)}
             <h3>Calculate your BMI:</h3>
             <button onClick={() => setIsChild(false)}>Adult</button>
             <button onClick={() => setIsChild(true)}>Child</button>
@@ -112,7 +117,7 @@ const BMICalculator = () => {
             <BMISlider
                 setBMI={handleBMIChange}
                 readBMI={state.bmi}
-                active={state.height > 0 && state.weight > 0}
+                active={Number(state.height) > 0 && Number(state.weight) > 0}
             />
         </div>
     )
